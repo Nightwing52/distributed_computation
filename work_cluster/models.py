@@ -1,3 +1,5 @@
+import numpy as np
+
 class Request:
     def __init__(self, xList : list[float], yList : list[float], 
                  vxList : list[float], vyList : list[float], mList : list[float], 
@@ -25,7 +27,6 @@ class Request:
         return True
 
 class Response:
-    def __init__(self, xBinList : list[list[float]], yBinList : list[list[float]]):
+    def __init__(self, binMatrix : list[np.matrix]):
         # there is a bin list for every step in time
-        self.__xBinList__ = xBinList
-        self.__yBinList__ = yBinList
+        self.__binMatrix__ = binMatrix
