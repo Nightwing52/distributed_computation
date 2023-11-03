@@ -25,6 +25,37 @@ class Request:
             return False
         
         return True
+    
+    def get_xList(self):
+        return self.__xList__
+    
+    def get_yList(self):
+        return self.__yList__
+    
+    def get_vxList(self):
+        return self.__vxList__
+    
+    def get_vyList(self):
+        return self.__vyList__
+    
+    def get_mList(self):
+        return self.__mList__
+    
+    def get_G(self):
+        return self.__G__
+    
+    def get_T(self):
+        return self.__T__
+
+class SimulationState(Request):
+    def __init__(self, request : Request):
+        self.__xList__ = request.get_xList()
+        self.__yList__ = request.get_yList()
+        self.__vxList__ = request.get_vxList()
+        self.__vyList__ = request.get_vyList()
+        self.__mList__ = request.get_mList()
+        self.__G__ = request.get_G()
+        self.__T__ = request.get_T()
 
 class Response:
     def __init__(self, binMatrix : list[np.matrix]):
