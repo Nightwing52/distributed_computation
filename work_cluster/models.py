@@ -49,13 +49,8 @@ class Request:
 
 class SimulationState(Request):
     def __init__(self, request : Request):
-        self.__xList__ = request.get_xList()
-        self.__yList__ = request.get_yList()
-        self.__vxList__ = request.get_vxList()
-        self.__vyList__ = request.get_vyList()
-        self.__mList__ = request.get_mList()
-        self.__G__ = request.get_G()
-        self.__T__ = request.get_T()
+        Request.__init__(self, request.get_xList(), request.get_yList(), request.get_vxList(), request.get_vyList(),
+              request.get_mList(), request.get_G(), request.get_T())
 
 class Response:
     def __init__(self, binMatrix : list[np.matrix]):

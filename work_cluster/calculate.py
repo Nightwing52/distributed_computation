@@ -24,9 +24,19 @@ def first_step(initialState : SimulationState) -> SimulationState:
 
 # calculates force given state and puts result in [N, 2] matrix of the form [Fx, Fy]
 def calculate_force(state : SimulationState) -> np.matrix:
-    # TODO: implement
+    G : float = state.get_G()
     F : np.matrix = np.matrix(np.zeros([len(state.get_xList()), 2]))
-
+    for i in range(len(state.get_xList())):
+        ri = np.array([state.get_xList()[i], state.get_yList()[i]])
+        mi = np.array(state.get_mList()[i])
+        for j in range(len(state.get_xList())):
+            if(i != j):
+                rj = np.array([state.get_xList()[j], state.get_yList()[j]])
+                mj = state.get_mList()[j]
+                rij_norm = np.linalg.norm(ri-rj)
+                Fij = 1.0*G*mi*mj*(rj-ri)/rij_norm**3
+                F[i, 0:2] += Fij
+                
     return F
 
 # calculates density given state
