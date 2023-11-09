@@ -1,5 +1,5 @@
 from models import Request, SimulationState
-from calculate import calculate_force
+from calculate import calculate_force, calculate_density
 import numpy as np
 
 THRESHOLD = 10**(-9)
@@ -26,3 +26,8 @@ def test_multi_force():
     initialState = SimulationState(request)
     force = calculate_force(initialState)
     assert(is_close_ndarray(force[0, 0:2], 2**(5.0/2.0)*0.5*np.matrix([1.0, 0.0])))
+
+def test_density():
+    request = Request([0.1], [0.1], [0.0], [0.0], [3.0], 1.0, 500)
+    state = SimulationState(request)
+    assert(is_close_ndarray(calculate_density(state, 2), np.matrix([[12.0, 0.0], [0.0, 0.0]])))

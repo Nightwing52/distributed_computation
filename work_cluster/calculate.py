@@ -40,6 +40,10 @@ def calculate_force(state : SimulationState) -> np.matrix:
     return F
 
 # calculates density given state
-def calculate_density(state : SimulationState) -> np.matrix:
-    # TODO: implement
-    return np.matrix(np.zeros([2, 2]))
+def calculate_density(state : SimulationState, numBins : int) -> np.matrix:
+    dl : float = 1.0/numBins
+    dA : float = 1.0/numBins**2
+    M : np.matrix = np.matrix(np.zeros([numBins, numBins]))
+    for i in range(len(state.get_xList())):
+        M[int(state.get_xList()[i]/dl), int(state.get_yList()[i]/dl)] += state.get_mList()[i]
+    return M/dA
