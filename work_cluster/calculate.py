@@ -1,9 +1,11 @@
 from models import Request, Response, SimulationState
 import numpy as np
 
+NUM_BINS = 50
+
 def simulate(request : Request) -> Response:
-    states : list[SimulationState] = [SimulationState(request)] # carries current state and state before that
-    output : Response = Response([])
+    states : list[SimulationState] = [request.create_state()] # carries current state and state before that
+    output : Response = Response([calculate_density(states[0], NUM_BINS)])
     
     states.append(first_step(states[0]))
 
@@ -20,8 +22,11 @@ def simulate(request : Request) -> Response:
 
 # performs first step of Verlet integration
 def first_step(initialState : SimulationState) -> SimulationState:
-    #new_x = initialState.get_xList()+(initialState.get_xList()+initialState.get_yList())*initialState.get_delta()+0.5*calculate_force(initialState)/initialState.get_mList()*initialState.get_delta()**2
-    return initialState
+    F = calculate_force(initialState)
+    new_x = initialState.get_xList()+initialState.get_vxList()*initialState.get_delta()+0.5*F[0:,0]*initialState.get_delta()**2
+    new_y = initialState.get_yList()+initialState.get_yList()*initialState.get_delta()+0.5*F[0:,1]*initialState.get_delta()**2
+    return SimulationState(new_x, new_y, initialState.get_vxList(), initialState.get_vyList(), initialState.get_mList(),
+                           initialState.get_G(), initialState.get_T(), initialState.get_delta())
 
 # calculates force given state and puts result in [N, 2] matrix of the form [Fx, Fy]
 def calculate_force(state : SimulationState) -> np.matrix:

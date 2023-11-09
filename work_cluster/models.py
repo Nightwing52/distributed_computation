@@ -51,10 +51,15 @@ class Request:
     def get_delta(self):
         return self.__delta__
 
+    def create_state(self): # creates state from request object
+        return SimulationState(np.array(self.get_xList()), np.array(self.get_yList()), np.array(self.get_vxList()),
+                np.array(self.get_vyList()), np.array(self.get_mList()), self.get_G(), self.get_T(), self.get_delta())
+
 class SimulationState(Request):
-    def __init__(self, request : Request):
-        Request.__init__(self, np.array(request.get_xList()), np.array(request.get_yList()), np.array(request.get_vxList()),
-                np.array(request.get_vyList()), np.array(request.get_mList()), request.get_G(), request.get_T(), request.get_delta())
+    def __init__(self, xList, yList, 
+                 vxList, vyList, mList, 
+                 G : float, T : int, delta : float):
+        Request.__init__(self, xList, yList, vxList, vyList, mList, G, T, delta)
 
 class Response:
     def __init__(self, binMatrix : list[np.matrix]):
