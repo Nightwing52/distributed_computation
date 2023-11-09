@@ -8,17 +8,15 @@ def simulate(request : Request) -> Response:
     output : Response = Response([calculate_density(states[0], NUM_BINS)])
     
     states.append(first_step(states[0]))
+    output.add(calculate_density(states[1], NUM_BINS))
 
     for i in range(2, request.get_T()):
         F : np.matrix = calculate_force(states[-1])
 
         # TODO: update state and append new density to output
+        output.add(calculate_density(states[-1], NUM_BINS))
         
-
-
-        
-
-    return Response([])
+    return output
 
 # performs first step of Verlet integration
 def first_step(initialState : SimulationState) -> SimulationState:

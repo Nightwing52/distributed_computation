@@ -62,6 +62,9 @@ class SimulationState(Request):
         Request.__init__(self, xList, yList, vxList, vyList, mList, G, T, delta)
 
 class Response:
-    def __init__(self, binMatrix : list[np.matrix]):
+    def __init__(self, binMatrixList : list[np.matrix]):
         # there is a bin list for every step in time
-        self.__binMatrix__ = binMatrix
+        self.__binMatrixList__ = binMatrixList
+    
+    def add(self, frame : np.matrix) -> None:
+        self.__binMatrixList__.append(frame)
