@@ -3,23 +3,23 @@ from calculate import calculate_force, calculate_density
 import numpy as np
 
 THRESHOLD = 10**(-9)
-request = Request([0.2, 0.8], [0.2, 0.8], [0.0, 0.0], [0.0, 0.0], [1.0, 1.0], 0.005, 100)
 
 # returns if two ndarrays are numerically close
 def is_close_ndarray(a, b):
     return np.linalg.norm(a-b) < THRESHOLD
 
 def test_calculate_force_x():
-    request = Request([0.0, 1.0], [0.5, 0.5], [0.0, 0.0], [0.0, 0.0], [2.0, 1.0], 3.0, 500)
+    m1 : float = 2.0
+    m2 : float = 1.0
+    x : list[float] = [0.0, 1.0]
+    G : float = 3.0
+    request = Request(x, [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [m1, m2], G, 500)
     initialState = SimulationState(request)
     force = calculate_force(initialState)
-    assert(is_close_ndarray(force, np.matrix([[6, 0], [-6, 0]])))
-
-def test_calculate_force_diag():
-    request = Request([0.0, 1.0], [0.0, 1.0], [0.0, 0.0], [0.0, 0.0], [1.0, 1.0], 1.0, 500)
-    initialState = SimulationState(request)
-    force = calculate_force(initialState)
-    assert(is_close_ndarray(force, (1.0/(2.0*np.sqrt(2)))*np.matrix([[1.0, 1.0], [-1.0, -1.0]])))
+    rij = np.array([x[1], 0.0])-np.array([x[0], 0.0])
+    Fij = G*m1*m2*rij/np.linalg.norm(rij)**3
+    print(Fij)
+    assert(is_close_ndarray(force, np.array([Fij, -Fij])))
 
 def test_multi_force():
     request = Request([0.5, 1.0, 1.0], [0.5, 1.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [1.0, 1.0, 1.0], 1.0, 500)
@@ -28,6 +28,8 @@ def test_multi_force():
     assert(is_close_ndarray(force[0, 0:2], 2**(5.0/2.0)*0.5*np.matrix([1.0, 0.0])))
 
 def test_density():
-    request = Request([0.1], [0.1], [0.0], [0.0], [3.0], 1.0, 500)
+    m : float = 3.0
+    N : int = 2
+    request = Request([0.1], [0.1], [0.0], [0.0], [m], 1.0, 500)
     state = SimulationState(request)
-    assert(is_close_ndarray(calculate_density(state, 2), np.matrix([[12.0, 0.0], [0.0, 0.0]])))
+    assert(is_close_ndarray(calculate_density(state, N), np.matrix([[m/(1/N**2), 0.0], [0.0, 0.0]])))
