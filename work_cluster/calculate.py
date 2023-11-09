@@ -20,6 +20,7 @@ def simulate(request : Request) -> Response:
 
 # performs first step of Verlet integration
 def first_step(initialState : SimulationState) -> SimulationState:
+    #new_x = initialState.get_xList()+(initialState.get_xList()+initialState.get_yList())*initialState.get_delta()+0.5*calculate_force(initialState)/initialState.get_mList()*initialState.get_delta()**2
     return initialState
 
 # calculates force given state and puts result in [N, 2] matrix of the form [Fx, Fy]

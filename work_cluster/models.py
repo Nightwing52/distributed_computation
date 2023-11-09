@@ -1,9 +1,9 @@
 import numpy as np
 
 class Request:
-    def __init__(self, xList : list[float], yList : list[float], 
-                 vxList : list[float], vyList : list[float], mList : list[float], 
-                 G : float, T : int):
+    def __init__(self, xList, yList, 
+                 vxList, vyList, mList, 
+                 G : float, T : int, delta : float):
         self.__xList__ = xList
         self.__yList__ = yList
         self.__vxList__ = vxList
@@ -11,6 +11,7 @@ class Request:
         self.__mList__ = mList
         self.__G__ = G
         self.__T__ = T
+        self.__delta__ = delta
     
     def validate(self) -> bool:
         # within unit square
@@ -21,7 +22,7 @@ class Request:
             if(y < 0.0 or y > 1.0):
                 return False
         
-        if(self.__G__ <= 0.0 or self.__T__ <= 0):
+        if(self.__G__ <= 0.0 or self.__T__ <= 0 or self.__delta__ <= 0.0):
             return False
         
         return True
@@ -46,11 +47,14 @@ class Request:
     
     def get_T(self):
         return self.__T__
+    
+    def get_delta(self):
+        return self.__delta__
 
 class SimulationState(Request):
     def __init__(self, request : Request):
-        Request.__init__(self, request.get_xList(), request.get_yList(), request.get_vxList(), request.get_vyList(),
-              request.get_mList(), request.get_G(), request.get_T())
+        Request.__init__(self, np.array(request.get_xList()), np.array(request.get_yList()), np.array(request.get_vxList()),
+                np.array(request.get_vyList()), np.array(request.get_mList()), request.get_G(), request.get_T(), request.get_delta())
 
 class Response:
     def __init__(self, binMatrix : list[np.matrix]):
