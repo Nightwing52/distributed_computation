@@ -12,10 +12,16 @@ def simulate(request : Request) -> Response:
 
     for i in range(2, request.get_T()):
         F : np.matrix = calculate_force(states[-1])
+        new_x = 2.0*states[-1].get_xList()-states[-2].get_xList()+F[:,0]/states[-1].get_mList()*states[-1].get_delta()**2
+        new_y = 2.0*states[-1].get_yList()-states[-2].get_yList()+F[:,1]/states[-1].get_mList()*states[-1].get_delta()**2
 
         # TODO: update state and append new density to output
+        new_state : SimulationState = SimulationState(new_x, new_y, [0], [0], states[-1].get_mList(), states[-1].get_G(),
+                                                      states[-1].get_T(), states[-1].get_delta())
+        states[-2] = states[-1]
+        states[-1] = new_state
         output.add(calculate_density(states[-1], NUM_BINS))
-        
+
     return output
 
 # performs first step of Verlet integration
